@@ -3,6 +3,7 @@ name = "prosemirror"
 version = "0.1.0"
 authors = ["Xiphoseer"]
 edition = "2018"
+license = "MIT"
 
 [features]
 cmark = ["pulldown-cmark", "pulldown-cmark-to-cmark"]
