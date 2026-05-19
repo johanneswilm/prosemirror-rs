@@ -597,7 +597,7 @@ impl Node<Dyn> for DynamicNode {
         match &self.inner {
             DynNodeInner::Text(tn) => tn.text.len_utf16(),
             DynNodeInner::Element { content } => {
-                if content.size() == 0 { 1 } else { content.size() + 2 }
+                if self.is_leaf() { 1 } else { content.size() + 2 }
             }
         }
     }
@@ -654,7 +654,22 @@ impl Node<Dyn> for DynamicNode {
     fn is_leaf(&self) -> bool {
         match &self.inner {
             DynNodeInner::Text(_) => false,
-            DynNodeInner::Element { content } => content.size() == 0,
+            DynNodeInner::Element { .. } => {
+                // A node is a leaf only if its *type* cannot hold any children —
+                // i.e. the content-expression DFA has no outgoing edges from
+                // the start state.  An empty-but-nullable type (e.g. `text*`)
+                // is NOT a leaf even when it currently contains no children.
+                with_types(|store| {
+                    store.node_types
+                        .get(self.type_idx)
+                        .and_then(|t| store.content_exprs.get(t.content_expr_idx))
+                        .map(|expr| {
+                            expr.states.first().map_or(true, |s| s.edges.is_empty())
+                        })
+                })
+                .flatten()
+                .unwrap_or(true)
+            }
         }
     }
 }
