@@ -67,7 +67,31 @@ impl StepMap {
         inverted: false,
     };
 
-    /// Create a new step map with the given ranges
+    /// Create a new step map with the given ranges.
+    ///
+    /// Each triple in `ranges` is `[position, old_size, new_size]`.
+    /// Positions before `position` are unchanged; positions inside the replaced
+    /// span land at one of the two ends depending on the `assoc` bias.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use prosemirror::transform::{Mappable, StepMap};
+    ///
+    /// // Insert 4 characters at position 2 (old_size = 0, new_size = 4)
+    /// let map = StepMap::new(vec![2, 0, 4]);
+    ///
+    /// assert_eq!(map.map(0,  1),  0); // before the insertion: unchanged
+    /// assert_eq!(map.map(2, -1),  2); // at the gap, bias left: stays before new content
+    /// assert_eq!(map.map(2,  1),  6); // at the gap, bias right: moves after new content
+    /// assert_eq!(map.map(3,  1),  7); // after the insertion: shifted by 4
+    ///
+    /// // A deletion: remove 3 characters starting at position 2
+    /// let del = StepMap::new(vec![2, 3, 0]);
+    /// assert_eq!(del.map(0,  1), 0); // before: unchanged
+    /// assert_eq!(del.map(5,  1), 2); // inside the deleted range: collapses to start
+    /// assert_eq!(del.map(8,  1), 5); // after: shifted by -3
+    /// ```
     pub fn new(ranges: Vec<usize>) -> Self {
         StepMap {
             ranges,
@@ -263,7 +287,29 @@ fn recover_offset(value: usize) -> isize {
     ((value - (value & 0xFFFF)) / 65536) as isize
 }
 
-/// A pipeline of `StepMap`s with optional mirror-pair tracking for rebasing.
+/// A pipeline of [`StepMap`]s with optional mirror-pair tracking for rebasing.
+///
+/// Maps are applied left-to-right: position `p` is first mapped through
+/// `maps[0]`, then through `maps[1]`, and so on.
+///
+/// # Example
+///
+/// ```
+/// use prosemirror::transform::{Mappable, Mapping, StepMap};
+///
+/// let mut mapping = Mapping::new();
+/// // Step 1: delete 3 characters at position 2
+/// mapping.append_map(StepMap::new(vec![2, 3, 0]), None);
+/// // Step 2: insert 1 character at position 2 (in the already-updated document)
+/// mapping.append_map(StepMap::new(vec![2, 0, 1]), None);
+///
+/// assert_eq!(mapping.map(0,  1), 0); // before the affected range: unchanged
+/// assert_eq!(mapping.map(10, 1), 8); // net shift is −3 + 1 = −2
+///
+/// // The inverse mapping undoes both steps in reverse order
+/// let inv = mapping.invert();
+/// assert_eq!(inv.map(8, 1), 10);
+/// ```
 #[derive(Debug, Clone, Default)]
 pub struct Mapping {
     /// The individual step maps in this mapping

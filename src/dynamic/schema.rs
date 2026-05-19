@@ -140,7 +140,39 @@ pub struct DynamicSchema {
 }
 
 impl DynamicSchema {
-    /// Build a schema from a JSON value.
+    /// Build a [`DynamicSchema`] from a JSON `SchemaSpec`.
+    ///
+    /// The JSON object must have a `"nodes"` map (and optionally a `"marks"` map)
+    /// following ProseMirror's schema-spec format.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use prosemirror::dynamic::DynamicSchema;
+    /// use prosemirror::model::Node;
+    ///
+    /// let schema = DynamicSchema::from_json(&serde_json::json!({
+    ///     "nodes": {
+    ///         "doc":       { "content": "paragraph+" },
+    ///         "paragraph": { "content": "text*", "group": "block" },
+    ///         "text":      { "group": "inline" }
+    ///     },
+    ///     "marks": {}
+    /// })).unwrap();
+    ///
+    /// let text = schema.with_types(|| {
+    ///     let doc = schema.node_from_json(&serde_json::json!({
+    ///         "type": "doc",
+    ///         "content": [{
+    ///             "type": "paragraph",
+    ///             "content": [{"type": "text", "text": "hello"}]
+    ///         }]
+    ///     })).unwrap();
+    ///     doc.text_content()
+    /// });
+    ///
+    /// assert_eq!(text, "hello");
+    /// ```
     pub fn from_json(json: &serde_json::Value) -> Result<Self, DynamicSchemaError> {
         let spec: SchemaSpec = serde_json::from_value(json.clone())
             .map_err(|e| DynamicSchemaError::InvalidSpec(e.to_string()))?;

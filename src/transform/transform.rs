@@ -198,7 +198,44 @@ impl<S: Schema> Transform<S> {
         self.replace(from, Some(to), Some(Slice::new(content, 0, 0)))
     }
 
-    /// Delete a range.
+    /// Delete the content between positions `from` and `to`.
+    ///
+    /// This is a convenience wrapper around [`Transform::replace`] with an empty slice.
+    /// Positions follow ProseMirror's token-stream model: the opening tag of the first
+    /// child is at position 0, the first character of its text content is at position 1, etc.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use prosemirror::dynamic::{DynamicNode, DynamicSchema};
+    /// use prosemirror::dynamic::types::Dyn;
+    /// use prosemirror::model::Node;
+    /// use prosemirror::transform::Transform;
+    ///
+    /// let schema = DynamicSchema::from_json(&serde_json::json!({
+    ///     "nodes": {
+    ///         "doc":       { "content": "paragraph+" },
+    ///         "paragraph": { "content": "text*", "group": "block" },
+    ///         "text":      { "group": "inline" }
+    ///     },
+    ///     "marks": {}
+    /// })).unwrap();
+    ///
+    /// // Document: doc[ paragraph[ "hello world" ] ]
+    /// // Positions: 0=before-p  1='h' 2='e' ... 6=' ' 7='w' ... 11='d'  12=after-p
+    /// let after = schema.with_types(|| {
+    ///     let doc: DynamicNode = schema.node_from_json(&serde_json::json!({
+    ///         "type": "doc",
+    ///         "content": [{"type": "paragraph",
+    ///                       "content": [{"type": "text", "text": "hello world"}]}]
+    ///     })).unwrap();
+    ///     let mut tr: Transform<Dyn> = Transform::new(doc);
+    ///     tr.delete(7, 12); // remove "world" (positions 7 through 12)
+    ///     tr.doc.text_content()
+    /// });
+    ///
+    /// assert_eq!(after, "hello ");
+    /// ```
     pub fn delete(&mut self, from: usize, to: usize) -> &mut Self {
         self.replace(from, Some(to), None)
     }
@@ -328,7 +365,46 @@ impl<S: Schema> Transform<S> {
         self
     }
 
-    /// Split the node at the given position.
+    /// Split the node at the given position, producing two sibling nodes.
+    ///
+    /// `depth` controls how many ancestor levels are split (defaults to 1, i.e. just the
+    /// immediate parent). `types_after` can override the node types of the newly created
+    /// right-hand siblings.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use prosemirror::dynamic::{DynamicNode, DynamicSchema};
+    /// use prosemirror::dynamic::types::Dyn;
+    /// use prosemirror::model::Node;
+    /// use prosemirror::transform::Transform;
+    ///
+    /// let schema = DynamicSchema::from_json(&serde_json::json!({
+    ///     "nodes": {
+    ///         "doc":       { "content": "paragraph+" },
+    ///         "paragraph": { "content": "text*", "group": "block" },
+    ///         "text":      { "group": "inline" }
+    ///     },
+    ///     "marks": {}
+    /// })).unwrap();
+    ///
+    /// // "foobar" in a paragraph — position 4 falls between 'o' and 'b'
+    /// let (first, second) = schema.with_types(|| {
+    ///     let doc: DynamicNode = schema.node_from_json(&serde_json::json!({
+    ///         "type": "doc",
+    ///         "content": [{"type": "paragraph",
+    ///                       "content": [{"type": "text", "text": "foobar"}]}]
+    ///     })).unwrap();
+    ///     let mut tr: Transform<Dyn> = Transform::new(doc);
+    ///     tr.split(4, None, None); // split after "foo"
+    ///     let a = tr.doc.child(0).unwrap().text_content();
+    ///     let b = tr.doc.child(1).unwrap().text_content();
+    ///     (a, b)
+    /// });
+    ///
+    /// assert_eq!(first,  "foo");
+    /// assert_eq!(second, "bar");
+    /// ```
     pub fn split(
         &mut self,
         pos: usize,
