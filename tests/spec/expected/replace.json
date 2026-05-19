@@ -1,0 +1,418 @@
+{
+  "cases": [
+    {
+      "label": "can delete text",
+      "type": "replace",
+      "input": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "hello you"
+              }
+            ]
+          }
+        ]
+      },
+      "from": 5,
+      "to": 7,
+      "slice": null,
+      "output": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "hellyou"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "heyou"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "can join blocks",
+      "type": "replace",
+      "input": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "hello"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "you"
+              }
+            ]
+          }
+        ]
+      },
+      "from": 5,
+      "to": 8,
+      "slice": null,
+      "output": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "hellyou"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "helloyou"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "can overwrite text",
+      "type": "replace",
+      "input": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "hello you"
+              }
+            ]
+          }
+        ]
+      },
+      "from": 5,
+      "to": 7,
+      "slice": {
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "i k"
+              }
+            ]
+          }
+        ]
+      },
+      "output": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "hell"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "i k"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "you"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "helloi kou"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "can add a textblock",
+      "type": "replace",
+      "input": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "helloyou"
+              }
+            ]
+          }
+        ]
+      },
+      "from": 6,
+      "to": 6,
+      "slice": {
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "there"
+              }
+            ]
+          }
+        ]
+      },
+      "output": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "hello"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "there"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "you"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "hello"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "there"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "you"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "merges blocks across deleted content",
+      "type": "replace",
+      "input": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "a"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "b"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "c"
+              }
+            ]
+          }
+        ]
+      },
+      "from": 3,
+      "to": 6,
+      "slice": null,
+      "output": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "a"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "c"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "ac"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "can delete the whole document",
+      "type": "replace",
+      "input": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "heading",
+            "attrs": {
+              "level": 1
+            },
+            "content": [
+              {
+                "type": "text",
+                "text": "hi"
+              }
+            ]
+          },
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "you"
+              }
+            ]
+          }
+        ]
+      },
+      "from": 0,
+      "to": 7,
+      "slice": null,
+      "output": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "u"
+              }
+            ]
+          }
+        ]
+      },
+      "expected": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph"
+          }
+        ]
+      }
+    }
+  ]
+}

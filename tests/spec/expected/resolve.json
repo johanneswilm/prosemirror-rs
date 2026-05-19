@@ -1,0 +1,119 @@
+{
+  "doc": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "ab"
+          }
+        ]
+      },
+      {
+        "type": "blockquote",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "em"
+                  }
+                ],
+                "text": "cd"
+              },
+              {
+                "type": "text",
+                "text": "ef"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "cases": [
+    {
+      "pos": 0,
+      "depth": 0,
+      "parent_offset": 0,
+      "parent_type": "doc"
+    },
+    {
+      "pos": 1,
+      "depth": 1,
+      "parent_offset": 0,
+      "parent_type": "paragraph"
+    },
+    {
+      "pos": 2,
+      "depth": 1,
+      "parent_offset": 1,
+      "parent_type": "paragraph"
+    },
+    {
+      "pos": 3,
+      "depth": 1,
+      "parent_offset": 2,
+      "parent_type": "paragraph"
+    },
+    {
+      "pos": 4,
+      "depth": 0,
+      "parent_offset": 4,
+      "parent_type": "doc"
+    },
+    {
+      "pos": 5,
+      "depth": 1,
+      "parent_offset": 0,
+      "parent_type": "blockquote"
+    },
+    {
+      "pos": 6,
+      "depth": 2,
+      "parent_offset": 0,
+      "parent_type": "paragraph"
+    },
+    {
+      "pos": 7,
+      "depth": 2,
+      "parent_offset": 1,
+      "parent_type": "paragraph"
+    },
+    {
+      "pos": 8,
+      "depth": 2,
+      "parent_offset": 2,
+      "parent_type": "paragraph"
+    },
+    {
+      "pos": 9,
+      "depth": 2,
+      "parent_offset": 3,
+      "parent_type": "paragraph"
+    },
+    {
+      "pos": 10,
+      "depth": 2,
+      "parent_offset": 4,
+      "parent_type": "paragraph"
+    },
+    {
+      "pos": 11,
+      "depth": 1,
+      "parent_offset": 6,
+      "parent_type": "blockquote"
+    },
+    {
+      "pos": 12,
+      "depth": 0,
+      "parent_offset": 12,
+      "parent_type": "doc"
+    }
+  ]
+}

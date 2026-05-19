@@ -1,0 +1,189 @@
+{
+  "cases": [
+    {
+      "label": "single insertion",
+      "results": [
+        {
+          "from": 0,
+          "bias": 1,
+          "to": 0,
+          "expected_to": 0,
+          "lossy": false,
+          "inverse_to": 0
+        },
+        {
+          "from": 2,
+          "bias": 1,
+          "to": 6,
+          "expected_to": 6,
+          "lossy": false,
+          "inverse_to": 2
+        },
+        {
+          "from": 2,
+          "bias": -1,
+          "to": 2,
+          "expected_to": 2,
+          "lossy": false,
+          "inverse_to": 2
+        },
+        {
+          "from": 3,
+          "bias": 1,
+          "to": 7,
+          "expected_to": 7,
+          "lossy": false,
+          "inverse_to": 3
+        }
+      ]
+    },
+    {
+      "label": "single deletion",
+      "results": [
+        {
+          "from": 0,
+          "bias": 1,
+          "to": 0,
+          "expected_to": 0,
+          "lossy": false,
+          "inverse_to": 0
+        },
+        {
+          "from": 2,
+          "bias": -1,
+          "to": 2,
+          "expected_to": 2,
+          "lossy": false,
+          "inverse_to": 2
+        },
+        {
+          "from": 3,
+          "bias": 1,
+          "to": 2,
+          "expected_to": 2,
+          "lossy": true,
+          "inverse_to": 6
+        },
+        {
+          "from": 6,
+          "bias": 1,
+          "to": 2,
+          "expected_to": 2,
+          "lossy": false,
+          "inverse_to": 6
+        },
+        {
+          "from": 6,
+          "bias": -1,
+          "to": 2,
+          "expected_to": 2,
+          "lossy": true,
+          "inverse_to": 2
+        },
+        {
+          "from": 7,
+          "bias": 1,
+          "to": 3,
+          "expected_to": 3,
+          "lossy": false,
+          "inverse_to": 7
+        }
+      ]
+    },
+    {
+      "label": "single replace",
+      "results": [
+        {
+          "from": 0,
+          "bias": 1,
+          "to": 0,
+          "expected_to": 0,
+          "lossy": false,
+          "inverse_to": 0
+        },
+        {
+          "from": 2,
+          "bias": 1,
+          "to": 2,
+          "expected_to": 2,
+          "lossy": false,
+          "inverse_to": 2
+        },
+        {
+          "from": 4,
+          "bias": 1,
+          "to": 6,
+          "expected_to": 6,
+          "lossy": true,
+          "inverse_to": 6
+        },
+        {
+          "from": 4,
+          "bias": -1,
+          "to": 2,
+          "expected_to": 2,
+          "lossy": true,
+          "inverse_to": 2
+        },
+        {
+          "from": 6,
+          "bias": -1,
+          "to": 6,
+          "expected_to": 6,
+          "lossy": false,
+          "inverse_to": 6
+        },
+        {
+          "from": 8,
+          "bias": 1,
+          "to": 8,
+          "expected_to": 8,
+          "lossy": false,
+          "inverse_to": 8
+        }
+      ]
+    },
+    {
+      "label": "del before 1",
+      "pos": 2,
+      "side": -1,
+      "flags": "db",
+      "expected_flags": "db"
+    },
+    {
+      "label": "del before 2",
+      "pos": 2,
+      "side": 1,
+      "flags": "b",
+      "expected_flags": "b"
+    },
+    {
+      "label": "del after 1",
+      "pos": 2,
+      "side": -1,
+      "flags": "a",
+      "expected_flags": "a"
+    },
+    {
+      "label": "del after 2",
+      "pos": 2,
+      "side": 1,
+      "flags": "da",
+      "expected_flags": "da"
+    },
+    {
+      "label": "del across 1",
+      "pos": 2,
+      "side": -1,
+      "flags": "dbax",
+      "expected_flags": "dbax"
+    },
+    {
+      "label": "del across 2",
+      "pos": 2,
+      "side": 1,
+      "flags": "dbax",
+      "expected_flags": "dbax"
+    }
+  ]
+}

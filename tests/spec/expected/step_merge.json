@@ -1,0 +1,868 @@
+{
+  "test_doc": {
+    "type": "doc",
+    "content": [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "foobar"
+          }
+        ]
+      }
+    ]
+  },
+  "cases": [
+    {
+      "label": "merges typing changes",
+      "should_merge": true,
+      "step1": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 2,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "a"
+            }
+          ]
+        }
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 3,
+        "to": 3,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "b"
+            }
+          ]
+        }
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "faboobar"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "faboobar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "merges inverse typing",
+      "should_merge": true,
+      "step1": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 2,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "a"
+            }
+          ]
+        }
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 2,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "b"
+            }
+          ]
+        }
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fbaoobar"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fbaoobar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "doesn't merge separated typing",
+      "should_merge": false,
+      "step1": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 2,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "a"
+            }
+          ]
+        }
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 4,
+        "to": 4,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "label": "doesn't merge inverted separated typing",
+      "should_merge": false,
+      "step1": {
+        "stepType": "replace",
+        "from": 3,
+        "to": 3,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "a"
+            }
+          ]
+        }
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 2,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "label": "merges adjacent backspaces",
+      "should_merge": true,
+      "step1": {
+        "stepType": "replace",
+        "from": 3,
+        "to": 4
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 3
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fbar"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fbar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "merges adjacent deletes",
+      "should_merge": true,
+      "step1": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 3
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 3
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fbar"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fbar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "doesn't merge separate backspaces",
+      "should_merge": false,
+      "step1": {
+        "stepType": "replace",
+        "from": 1,
+        "to": 2
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 3
+      }
+    },
+    {
+      "label": "merges backspace and type",
+      "should_merge": true,
+      "step1": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 3
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 2,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "x"
+            }
+          ]
+        }
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fxobar"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fxobar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "merges longer adjacent inserts",
+      "should_merge": true,
+      "step1": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 2,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "quux"
+            }
+          ]
+        }
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 6,
+        "to": 6,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "baz"
+            }
+          ]
+        }
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fquuxbazoobar"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fquuxbazoobar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "merges inverted longer inserts",
+      "should_merge": true,
+      "step1": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 2,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "quux"
+            }
+          ]
+        }
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 2,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "baz"
+            }
+          ]
+        }
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fbazquuxoobar"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fbazquuxoobar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "merges longer deletes",
+      "should_merge": true,
+      "step1": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 5
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 4
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "f"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "f"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "merges inverted longer deletes",
+      "should_merge": true,
+      "step1": {
+        "stepType": "replace",
+        "from": 4,
+        "to": 6
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 2,
+        "to": 4
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fr"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "fr"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "merges overwrites",
+      "should_merge": true,
+      "step1": {
+        "stepType": "replace",
+        "from": 3,
+        "to": 4,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "x"
+            }
+          ]
+        }
+      },
+      "step2": {
+        "stepType": "replace",
+        "from": 4,
+        "to": 5,
+        "slice": {
+          "content": [
+            {
+              "type": "text",
+              "text": "y"
+            }
+          ]
+        }
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "foxyar"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "foxyar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "merges adding adjacent styles",
+      "should_merge": true,
+      "step1": {
+        "stepType": "addMark",
+        "mark": {
+          "type": "em"
+        },
+        "from": 1,
+        "to": 2
+      },
+      "step2": {
+        "stepType": "addMark",
+        "mark": {
+          "type": "em"
+        },
+        "from": 2,
+        "to": 4
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "em"
+                  }
+                ],
+                "text": "foo"
+              },
+              {
+                "type": "text",
+                "text": "bar"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "em"
+                  }
+                ],
+                "text": "foo"
+              },
+              {
+                "type": "text",
+                "text": "bar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "merges adding overlapping styles",
+      "should_merge": true,
+      "step1": {
+        "stepType": "addMark",
+        "mark": {
+          "type": "em"
+        },
+        "from": 1,
+        "to": 3
+      },
+      "step2": {
+        "stepType": "addMark",
+        "mark": {
+          "type": "em"
+        },
+        "from": 2,
+        "to": 4
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "em"
+                  }
+                ],
+                "text": "foo"
+              },
+              {
+                "type": "text",
+                "text": "bar"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "marks": [
+                  {
+                    "type": "em"
+                  }
+                ],
+                "text": "foo"
+              },
+              {
+                "type": "text",
+                "text": "bar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "doesn't merge separate styles",
+      "should_merge": false,
+      "step1": {
+        "stepType": "addMark",
+        "mark": {
+          "type": "em"
+        },
+        "from": 1,
+        "to": 2
+      },
+      "step2": {
+        "stepType": "addMark",
+        "mark": {
+          "type": "em"
+        },
+        "from": 3,
+        "to": 4
+      }
+    },
+    {
+      "label": "merges removing adjacent styles",
+      "should_merge": true,
+      "step1": {
+        "stepType": "removeMark",
+        "mark": {
+          "type": "em"
+        },
+        "from": 1,
+        "to": 2
+      },
+      "step2": {
+        "stepType": "removeMark",
+        "mark": {
+          "type": "em"
+        },
+        "from": 2,
+        "to": 4
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "foobar"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "foobar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "merges removing overlapping styles",
+      "should_merge": true,
+      "step1": {
+        "stepType": "removeMark",
+        "mark": {
+          "type": "em"
+        },
+        "from": 1,
+        "to": 3
+      },
+      "step2": {
+        "stepType": "removeMark",
+        "mark": {
+          "type": "em"
+        },
+        "from": 2,
+        "to": 4
+      },
+      "result_after_both": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "foobar"
+              }
+            ]
+          }
+        ]
+      },
+      "result_after_merged": {
+        "type": "doc",
+        "content": [
+          {
+            "type": "paragraph",
+            "content": [
+              {
+                "type": "text",
+                "text": "foobar"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "label": "doesn't merge removing separate styles",
+      "should_merge": false,
+      "step1": {
+        "stepType": "removeMark",
+        "mark": {
+          "type": "em"
+        },
+        "from": 1,
+        "to": 2
+      },
+      "step2": {
+        "stepType": "removeMark",
+        "mark": {
+          "type": "em"
+        },
+        "from": 3,
+        "to": 4
+      }
+    }
+  ]
+}
